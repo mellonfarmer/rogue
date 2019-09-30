@@ -1,0 +1,38 @@
+#box1{
+	width:100px;
+	height: 100px;
+	background-color: red;
+	position: absolute;
+	margin-left: 250px;
+	margin-top: 250px
+}
+
+#boxContainer{
+	height:600px;
+	width:600px;
+	background-color: blue;
+}
+
+#controls{
+	//height:100px;
+	//width:10%;
+}
+
+.grid-container {
+  display: inline-grid;
+  grid-template-columns: auto auto auto auto auto auto auto auto auto ;
+  background-color: #2196F3;
+  padding: 10px;
+  border-radius: 20px;
+  //position: absolute;
+  //margin-left: 800px;
+  top:10px;
+}
+
+.grid-item {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  font-size: 10px;
+  text-align: center;
+}

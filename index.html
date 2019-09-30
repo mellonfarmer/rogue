@@ -1,0 +1,36 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="style/main.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="scripts/script.js"></script>  
+  </head>
+
+
+
+  <body onload="fncCreateMap();">
+
+
+    <div id="controls">
+      <button id="btnMove" onclick="fncMove('UP');">Up</button>
+      <button id="btnMove" onclick="fncMove('DOWN');">Down</button>
+      <button id="btnMove" onclick="fncMove('LEFT');">Left</button>
+      <button id="btnMove" onclick="fncMove('RIGHT');">Right</button>
+      <button id="btnMove" onclick="fncCreateMap();">Create Grid</button>
+      <button id="btnMove" onclick="fncClearGrid();">Clear Grid</button>
+      <button id="btnMove" onclick="fncDrawMap();">update map</button>
+      <button id="btnMove" onclick="sortArray();">update map</button>
+
+
+
+
+    </div>
+    
+    <label id="info"></label>
+
+  <div class="grid-container"></div>
+
+
+
+  </body>
+
+</html>
