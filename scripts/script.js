@@ -5,12 +5,20 @@ document.getElementsByTagName('head')[0].appendChild(script);
 
 //Global variables
 //holds the list of rooms
-var arrRooms = [][];
+var arrRooms = [];
 
 var GRID_SIZE = 9;
 
 var currentLevel = 0;
 const DEFAULT_ROOMS = 10;
+
+
+function create2dArray(){
+	var arr = []
+	arr[0] = []  
+
+}
+
 
 
 //Funcitons
@@ -66,6 +74,7 @@ function fncLoadRooms(){
 function fncGenerateRoomArray(){
 	//clear exsisting room array
 	arrRooms.length = 0;
+	tempArray =[];
 	//initial generation
 	function CreateObjectItem(idx, idy, roomType)
 	{
@@ -73,24 +82,28 @@ function fncGenerateRoomArray(){
 		room.idx = idx;
 		room.idy = idy;
 		room.roomType = roomType;
-		arrRooms.push(room);
+		tempArray.push(room);
+		//return room;
 	}
 	function generateRandomID(){
 		//uncoment below to generate colour blocks everywhere :D
 		return Math.floor(Math.random()*5);
 
-			if( arrRooms.length < (DEFAULT_ROOMS + currentLevel) ){
-				return 1;
-			}else{
-				return 0;
-			}
+		//	if( arrRooms.length < (DEFAULT_ROOMS + currentLevel) ){
+		//		return 1;
+		//	}else{
+		//		return 0;
+		//	}
 		
 	}
-	for (var idx = 0 ; idx  <= (GRID_SIZE) ; idx++){
-		for (var idy = 0 ; idy  <= (GRID_SIZE) ; idy++){
+
+	for (var idy = 0 ; idy  <= (GRID_SIZE) ; idy++){
+		for (var idx = 0 ; idx  <= (GRID_SIZE) ; idx++){
 			var tempRandom = generateRandomID();
 			CreateObjectItem(idx,idy,tempRandom); //white/gray
 		}
+		arrRooms[idy] = tempArray;
+		tempArray = [];
 	}
 }
 
@@ -140,21 +153,15 @@ var rooms = fncLoadRooms();
 
 
 //only change the display, need it to hold the data in an arry so the map doesnt change 
+//https://stackoverflow.com/questions/12583400/javascript-scope-of-nested-for-loop-index
+//loop bullshit
 function fncDrawMap(){
 	var rooms = fncLoadRooms();
-
+	var roomLength = arrRooms.length;
 
 	for (var idx = 0 ; idx  <= arrRooms.length ; idx++){
-		for (var idy = 0 ; idy  <= arrRooms.length ; idy++){
-
-		//if (id < 10){
-			//$("#0" +id+ ".grid-item").css('backgroundColor', rooms[(arrRooms[id].roomType)].colour);
-			///$("#0" +id+ ".grid-item").text(rooms[(arrRooms[id].roomType)].name);
-		//}else{
+		for (var idy = 0 ; idy  <= (roomLength - 1) ; idy++){
 			$("#" +idx + idy + ".grid-item").css('backgroundColor', rooms[(arrRooms[idx][idy].roomType)].colour);
-			//$("#" +id+ ".grid-item").text(arrRooms[id]);
-			
-
 		}
 	}
 
