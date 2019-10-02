@@ -7,7 +7,7 @@ document.getElementsByTagName('head')[0].appendChild(script);
 //holds the list of rooms
 var arrRooms = [];
 
-var GRID_SIZE = 9;
+var GRID_SIZE = 9; 
 
 var currentLevel = 0;
 const DEFAULT_ROOMS = 10;
@@ -33,10 +33,17 @@ function fncCreateMap(){
 	$(function(){
 		
 		var rooms = fncLoadRooms();
+		var autoSize = "";
 		fncClearGrid();
 		fncGenerateRoomArray();
 		
 		//gridID = 0;
+		for (var i = 0;  i < GRID_SIZE ; i++) {
+			autoSize = autoSize + "auto "
+		}
+
+		$(".grid-container").css('grid-template-columns', autoSize);
+
 		for (var rows = 0; rows < GRID_SIZE ;rows ++){
 
 			for (var columns = 0; columns < GRID_SIZE ; columns++) {
@@ -44,7 +51,7 @@ function fncCreateMap(){
 			}
 		}
 
-		fncDrawMap();
+		fncDrawMap(GRID_SIZE, GRID_SIZE);
 	});
 }
 
@@ -154,14 +161,16 @@ var rooms = fncLoadRooms();
 
 //only change the display, need it to hold the data in an arry so the map doesnt change 
 //https://stackoverflow.com/questions/12583400/javascript-scope-of-nested-for-loop-index
-//loop bullshit
-function fncDrawMap(){
+//fixed by adding pramaters for the row and column count
+function fncDrawMap(rowCount, columnCount){
 	var rooms = fncLoadRooms();
 	var roomLength = arrRooms.length;
 
-	for (var idx = 0 ; idx  <= arrRooms.length ; idx++){
-		for (var idy = 0 ; idy  <= (roomLength - 1) ; idy++){
+	for (var idx = 0 ; idx  <= rowCount ; idx++){
+		for (var idy = 0 ; idy  <= columnCount ; idy++){
 			$("#" +idx + idy + ".grid-item").css('backgroundColor', rooms[(arrRooms[idx][idy].roomType)].colour);
+			//$("#" +idx + idy + ".grid-item").text(arrRooms[idx][idy].idy + "," + arrRooms[idx][idy].idx);
+
 		}
 	}
 
