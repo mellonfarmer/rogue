@@ -12,6 +12,8 @@ var GRID_SIZE = 9;
 var currentLevel = 0;
 const DEFAULT_ROOMS = 10;
 
+var roomTypes = fncLoadRooms();
+
 //Funcitons
 function fncFindCenter(){
 	//get center 
@@ -33,7 +35,7 @@ function fncCreateMap(){
 	//will have difficulty passed as integar to allow more rooms to be created
 	$(function(){
 		
-		var rooms = fncLoadRooms();
+		var rooms = roomTypes;
 		var autoSize = "";
 		fncClearGrid();
 		fncGenerateRoomArray();
@@ -95,7 +97,7 @@ function fncGenerateRoomArray(){
 		//return room;
 	}
 	function generateRandomID(){
-		//uncoment below to generate colour blocks everywhere :D
+		//uncoment below to generate colour roomss everywhere :D
 		return Math.floor(Math.random()*5);
 
 			//if( arrRooms.length < (DEFAULT_ROOMS + currentLevel) ){
@@ -132,7 +134,35 @@ anything not a walkable room is black
 function basicMap(){
 	//get center 
 	var mapCenter = Math.floor(GRID_SIZE / 2);
+	// rules
+	/*
+	pick a blank side of a room
+	check if empty
+	check if the empty space is touching two rooms 
+
+	check number of rooms to place
+
+	cant create rooms in the first/outer layer of the grid, eg 00 - 09 00,10 to 90, 09 19 29 .. to 99, 09 to 99 
+
+	once all empty rooms have been placed:
+	replace one room with tresure
+	repalce one room with the exit
+	exit must be placed at the end of a corridor eg all 3 sides of the room are blank
+
+	player is then placed on the map atleast 3 rooms away from the exit
+	*/
+
+
+	//find the starting room location, going to use the middle to start with, not sure if i shuld use a lookup table to keep track 
+	arrRooms[mapCenter][mapCenter].roomType = 1;
+
+	//sort 
 	
+
+
+
+
+	fncDrawMap(GRID_SIZE, GRID_SIZE);
 
 }
 
@@ -160,7 +190,7 @@ function bubbleSort(arr){
 
 function sortArray(){
 //44 is the center
-var rooms = fncLoadRooms();
+var rooms = roomTypes;
 	arrRooms.sort(function(a,b){return a.id - b.id});
 	fncDrawMap();
 
@@ -172,7 +202,7 @@ var rooms = fncLoadRooms();
 //https://stackoverflow.com/questions/12583400/javascript-scope-of-nested-for-loop-index
 //fixed by adding pramaters for the row and column count
 function fncDrawMap(rowCount, columnCount){
-	var rooms = fncLoadRooms();
+	var rooms = roomTypes;
 	var roomLength = arrRooms.length;
 
 	for (var idx = 0 ; idx  <= rowCount ; idx++){
