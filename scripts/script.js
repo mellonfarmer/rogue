@@ -12,16 +12,17 @@ var GRID_SIZE = 9;
 var currentLevel = 0;
 const DEFAULT_ROOMS = 10;
 
-
-function create2dArray(){
-	var arr = []
-	arr[0] = []  
-
+//Funcitons
+function fncFindCenter(){
+	//get center 
+	var mapCenter = Math.floor(GRID_SIZE / 2);
+	//alert(mapCenter);
+	$("#" + mapCenter + mapCenter).css("backgroundColor", "rgb(255,0,0)");
+	
+	
 }
 
 
-
-//Funcitons
 function fncClearGrid(){
 	//change to blacnk each item in the graphic of the grid rather than distrying the layout
 	$(".grid-item").remove();
@@ -36,7 +37,8 @@ function fncCreateMap(){
 		var autoSize = "";
 		fncClearGrid();
 		fncGenerateRoomArray();
-		
+
+
 		//gridID = 0;
 		for (var i = 0;  i < GRID_SIZE ; i++) {
 			autoSize = autoSize + "auto "
@@ -96,18 +98,20 @@ function fncGenerateRoomArray(){
 		//uncoment below to generate colour blocks everywhere :D
 		return Math.floor(Math.random()*5);
 
-		//	if( arrRooms.length < (DEFAULT_ROOMS + currentLevel) ){
-		//		return 1;
-		//	}else{
-		//		return 0;
-		//	}
+			//if( arrRooms.length < (DEFAULT_ROOMS + currentLevel) ){
+			//	return 1;
+			//}else{
+			//	return 0;
+			//}
 		
 	}
 
 	for (var idy = 0 ; idy  <= (GRID_SIZE) ; idy++){
 		for (var idx = 0 ; idx  <= (GRID_SIZE) ; idx++){
 			var tempRandom = generateRandomID();
-			CreateObjectItem(idx,idy,tempRandom); //white/gray
+			//CreateObjectItem(idx,idy,tempRandom); //white/gray
+			CreateObjectItem(idx,idy,0); //white/gray
+
 		}
 		arrRooms[idy] = tempArray;
 		tempArray = [];
@@ -125,7 +129,12 @@ amount of rooms increases every level
 anything not a walkable room is black
 */
 
+function basicMap(){
+	//get center 
+	var mapCenter = Math.floor(GRID_SIZE / 2);
+	
 
+}
 
 //bubble sort for testing
 function bubbleSort(arr){
