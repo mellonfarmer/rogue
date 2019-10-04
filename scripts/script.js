@@ -12,6 +12,7 @@ var GRID_SIZE = 9;
 var currentLevel = 0;
 const DEFAULT_ROOMS = 10;
 
+
 var roomTypes = fncLoadRooms();
 
 //Funcitons
@@ -48,9 +49,9 @@ function fncCreateMap(){
 
 		$(".grid-container").css('grid-template-columns', autoSize);
 
-		for (var rows = 0; rows < GRID_SIZE ;rows ++){
+		for (var rows = 0; rows < (GRID_SIZE) ;rows ++){
 
-			for (var columns = 0; columns < GRID_SIZE ; columns++) {
+			for (var columns = 0; columns < (GRID_SIZE) ; columns++) {
 				$(".grid-container").append('<div class="grid-item" id="' +  rows + columns + '"></div>')
 			}
 		}
@@ -108,8 +109,8 @@ function fncGenerateRoomArray(){
 		
 	}
 
-	for (var idy = 0 ; idy  <= (GRID_SIZE) ; idy++){
-		for (var idx = 0 ; idx  <= (GRID_SIZE) ; idx++){
+	for (var idy = 0 ; idy  <= (GRID_SIZE -1) ; idy++){
+		for (var idx = 0 ; idx  <= (GRID_SIZE -1) ; idx++){
 			var tempRandom = generateRandomID();
 			//CreateObjectItem(idx,idy,tempRandom); //white/gray
 			CreateObjectItem(idx,idy,0); //white/gray
@@ -134,6 +135,7 @@ anything not a walkable room is black
 function basicMap(){
 	//get center 
 	var mapCenter = Math.floor(GRID_SIZE / 2);
+	var arrRoomDict =[];
 	// rules
 	/*
 	pick a blank side of a room
@@ -154,14 +156,90 @@ function basicMap(){
 
 
 	//find the starting room location, going to use the middle to start with, not sure if i shuld use a lookup table to keep track 
+	function CreateRoomDict(id, x, y)
+	{
+		//id, location [x] [y]
+		var room = new Object();
+		room.id = id;
+		room.x = x;
+		room.y = y;
+		arrRoomDict.push(room);
+		//return room;
+	}
+
+
 	arrRooms[mapCenter][mapCenter].roomType = 1;
-
-	//sort 
+	CreateRoomDict(arrRoomDict.length, mapCenter,mapCenter);
 	
+	function checkSpace(Rx,Ry){
+		//Rx Ry is the current room
+		for (var Ri = 0;Ri <= 8 ;Ri++){
+
+			//direct attachment
+			//top 
+			if (arrRooms[(Rx - 1)][Ry].roomType !== 1){}
+			//botom
+			if (arrRooms[(Rx + 1)][Ry].roomType !== 1){}
+			//left
+			if (arrRooms[(Rx)][Ry - 1].roomType !== 1){}
+			//right
+			if (arrRooms[(Rx )][Ry + 1].roomType !== 1){}
+			
+			//diagonals
+			//top left
+			if (arrRooms[(Rx - 1)][Ry - 1].roomType !== 1){
+				return 1;
+			}
+			//top Right
+			if (arrRooms[(Rx - 1)][Ry + 1].roomType !== 1){	
+				return 1;
+			}
+			//bottom left
+			if (arrRooms[(Rx - 1)][Ry + 1].roomType !== 1){
+				return 1;
+			}
+			//bottom right
+			if (arrRooms[(Rx + 1)][Ry + 1].roomType !== 1){
+				return 1;
+			}
+			return 0;
+		}
+
+	}
+
+	/*
+		Checking grid:
+		-1-1 |-1,0|-1,+1
+		0,-1 |0 ,0|0, +1
+		-1,+1|+1,0|+1,+1
+	*/
+
+	/*
+		
+	*/
+	//recursive funciton to generate rooms
+	//run until count is equal to the default plus level
+	var iCount = 0;
+
+	function Generate(iCount){
+		if (iCount == (DEFAULT_ROOMS + currentLevel) ){
+			return;
+		}else{
+			//pick a room on map via random number of exsisting rooms in arrRoomDict
+			var randRoom = Math.floor(Math.random()* arrRoomDict.length);
+
+			//get id and cordinates
+			
+			iCount ++;
+		}
+
+		for (var row = 0; row <= (arrRooms.length); i++) {
+			
+		}
 
 
-
-
+	}
+	console.log(arrRoomDict);
 	fncDrawMap(GRID_SIZE, GRID_SIZE);
 
 }
@@ -181,9 +259,17 @@ function bubbleSort(arr){
    return arr;
 }
 
+/*
+function pow(x, n) {
+  if (n == 1) {
+    return x;
+  } else {
+    return x * pow(x, n - 1);
+  }
+}
 
-
-
+alert( pow(2, 3) ); // 8
+*/
 
 
 
@@ -205,8 +291,8 @@ function fncDrawMap(rowCount, columnCount){
 	var rooms = roomTypes;
 	var roomLength = arrRooms.length;
 
-	for (var idx = 0 ; idx  <= rowCount ; idx++){
-		for (var idy = 0 ; idy  <= columnCount ; idy++){
+	for (var idx = 0 ; idx  <= (rowCount - 1); idx++){
+		for (var idy = 0 ; idy  <= (columnCount -1); idy++){
 			$("#" +idx + idy + ".grid-item").css('backgroundColor', rooms[(arrRooms[idx][idy].roomType)].colour);
 			//$("#" +idx + idy + ".grid-item").text(arrRooms[idx][idy].idy + "," + arrRooms[idx][idy].idx);
 
