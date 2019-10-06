@@ -165,41 +165,59 @@ function basicMap(){
 
 	function checkSpace(Rx,Ry){
 		//Rx Ry is the current room
-		for (var Ri = 0;Ri <= 8 ;Ri++){
+		//var t,b,l,r,tl,tr,bl,br = 0;
+		//for (var Ri = 0;Ri <= 8 ;Ri++){
 
 			//direct attachment
 			//top 
-			if (arrRooms[(Rx - 1)][Ry].roomType !== 1){}
+			if (arrRooms[(Rx - 1)][Ry].roomType == 1){
+				//t = 1;
+				console.log("Top");
+				return 1;
+
+			}
 			//botom
-			if (arrRooms[(Rx + 1)][Ry].roomType !== 1){}
+			if (arrRooms[(Rx + 1)][Ry].roomType == 1){
+				//b = 1;
+				console.log("Bottom");
+				return 2;
+			}
 			//left
-			if (arrRooms[(Rx)][Ry - 1].roomType !== 1){}
+			if (arrRooms[(Rx)][Ry - 1].roomType == 1){
+				console.log("Left");
+				return 3;
+
+			}
 			//right
-			if (arrRooms[(Rx )][Ry + 1].roomType !== 1){}
+			if (arrRooms[(Rx )][Ry + 1].roomType == 1){
+				console.log("Right");
+				return 4;
+
+			}
 			
 			//diagonals
 			//top left
 			if (arrRooms[(Rx - 1)][Ry - 1].roomType !== 0){
 				console.log("Top left");
-				return 1;
+				return 5;
 			}
 			//top Right
 			if (arrRooms[(Rx - 1)][Ry + 1].roomType !== 0){	
 				console.log("Top Right");
-				return 1;
+				return 6;
 			}
 			//bottom left
 			if (arrRooms[(Rx - 1)][Ry + 1].roomType !== 0){
 				console.log("Bottom left");
-				return 1;
+				return 7;
 			}
 			//bottom right
 			if (arrRooms[(Rx + 1)][Ry + 1].roomType !== 0){
 				console.log("Bottom Right");
-				return 1;
+				return 8;
 			}
 			return 0;
-		}
+		//}
 				/*
 		Checking grid:
 		-1-1 |-1,0|-1,+1
@@ -207,7 +225,7 @@ function basicMap(){
 		-1,+1|+1,0|+1,+1
 	*/
 	}
-
+	
 	//apply dictionary to main array
 	for (var i = 0; i <= arrRoomDict.length - 1; i++) {
 				arrRooms[arrRoomDict[i].x][arrRoomDict[i].y].roomType = 1;
@@ -215,9 +233,8 @@ function basicMap(){
 
 	
 	var iCount = 0;
-	var randRoomX = Math.floor(Math.random()* arrRooms.length);
-	var randRoomY = Math.floor(Math.random()* arrRooms.length);
-	AddRoomDict( randRoomX,randRoomY);
+
+	AddRoomDict( mapCenter,mapCenter);
 
 
 	//recursive funciton to generate rooms
@@ -229,17 +246,40 @@ function basicMap(){
 			//pick a room on map via random number of exsisting rooms in arrRoomDict
 			//cahnge this to random seed 
 
-			var randRoom = Math.floor(Math.random()* arrRoomDict.length);
-			//checkSpace(arrRoomDict[randRoom].x, arrRoomDict[randRoom].y)
+			
+			//random rooms
 			var randRoomX = Math.floor(Math.random()* arrRooms.length);
 			var randRoomY = Math.floor(Math.random()* arrRooms.length);
+
+			if (randRoomX == 0){randRoomX++}
+			if (randRoomX == 8){randRoomX--}
+
+			if (randRoomY == 0){randRoomY++}
+			if (randRoomY == 8){randRoomY--}
+
+			//console.log(randRoomX + ", " + randRoomY)
+
+			var checkResult = checkSpace(randRoomX, randRoomY);
+			console.log(checkResult);
+			
+			
+
+
+
 			AddRoomDict( randRoomX,randRoomY);
+
+			//room approch
+
+			//var randRoom = Math.floor(Math.random()* arrRoomDict.length);
+			//var checkResult = checkSpace(arrRoomDict[randRoom].x, arrRoomDict[randRoom].y);
+			//AddRoomDict( arrRoomDict[randRoom].x,arrRoomDict[randRoom].y);
 
 
 			//get id and cordinates
+			//console.log(iCount);
 			
 			iCount ++;
-			Generate(iCount)
+			Generate(iCount);
 		}
 
 	}
