@@ -99,14 +99,7 @@ function fncGenerateRoomArray(){
 	}
 	function generateRandomID(){
 		//uncoment below to generate colour roomss everywhere :D
-		return Math.floor(Math.random()*5);
-
-			//if( arrRooms.length < (DEFAULT_ROOMS + currentLevel) ){
-			//	return 1;
-			//}else{
-			//	return 0;
-			//}
-		
+		return Math.floor(Math.random()*5);		
 	}
 
 	for (var idy = 0 ; idy  <= (GRID_SIZE -1) ; idy++){
@@ -132,10 +125,13 @@ amount of rooms increases every level
 anything not a walkable room is black
 */
 
+//moved dictonary out side of the function so its still accessiable to clear
+var arrRoomDict =[];
 function basicMap(){
 	//get center 
+	fncGenerateRoomArray();
 	var mapCenter = Math.floor(GRID_SIZE / 2);
-	var arrRoomDict =[];
+
 	// rules
 	/*
 	pick a blank side of a room
@@ -156,21 +152,17 @@ function basicMap(){
 
 
 	//find the starting room location, going to use the middle to start with, not sure if i shuld use a lookup table to keep track 
-	function CreateRoomDict(id, x, y)
+	function AddRoomDict(x, y)
 	{
 		//id, location [x] [y]
 		var room = new Object();
-		room.id = id;
+		room.id = arrRoomDict.length;
 		room.x = x;
 		room.y = y;
 		arrRoomDict.push(room);
 		//return room;
 	}
 
-
-	arrRooms[mapCenter][mapCenter].roomType = 1;
-	CreateRoomDict(arrRoomDict.length, mapCenter,mapCenter);
-	
 	function checkSpace(Rx,Ry){
 		//Rx Ry is the current room
 		for (var Ri = 0;Ri <= 8 ;Ri++){
@@ -187,102 +179,85 @@ function basicMap(){
 			
 			//diagonals
 			//top left
-			if (arrRooms[(Rx - 1)][Ry - 1].roomType !== 1){
+			if (arrRooms[(Rx - 1)][Ry - 1].roomType !== 0){
+				console.log("Top left");
 				return 1;
 			}
 			//top Right
-			if (arrRooms[(Rx - 1)][Ry + 1].roomType !== 1){	
+			if (arrRooms[(Rx - 1)][Ry + 1].roomType !== 0){	
+				console.log("Top Right");
 				return 1;
 			}
 			//bottom left
-			if (arrRooms[(Rx - 1)][Ry + 1].roomType !== 1){
+			if (arrRooms[(Rx - 1)][Ry + 1].roomType !== 0){
+				console.log("Bottom left");
 				return 1;
 			}
 			//bottom right
-			if (arrRooms[(Rx + 1)][Ry + 1].roomType !== 1){
+			if (arrRooms[(Rx + 1)][Ry + 1].roomType !== 0){
+				console.log("Bottom Right");
 				return 1;
 			}
 			return 0;
 		}
-
-	}
-
-	/*
+				/*
 		Checking grid:
 		-1-1 |-1,0|-1,+1
 		0,-1 |0 ,0|0, +1
 		-1,+1|+1,0|+1,+1
 	*/
+	}
 
-	/*
-		
-	*/
+	//apply dictionary to main array
+	for (var i = 0; i <= arrRoomDict.length - 1; i++) {
+				arrRooms[arrRoomDict[i].x][arrRoomDict[i].y].roomType = 1;
+			}
+
+	
+	var iCount = 0;
+	var randRoomX = Math.floor(Math.random()* arrRooms.length);
+	var randRoomY = Math.floor(Math.random()* arrRooms.length);
+	AddRoomDict( randRoomX,randRoomY);
+
+
 	//recursive funciton to generate rooms
 	//run until count is equal to the default plus level
-	var iCount = 0;
-
 	function Generate(iCount){
-		if (iCount == (DEFAULT_ROOMS + currentLevel) ){
+		if (iCount == ((DEFAULT_ROOMS + currentLevel) -1 )){
 			return;
 		}else{
 			//pick a room on map via random number of exsisting rooms in arrRoomDict
+			//cahnge this to random seed 
+
 			var randRoom = Math.floor(Math.random()* arrRoomDict.length);
+			//checkSpace(arrRoomDict[randRoom].x, arrRoomDict[randRoom].y)
+			var randRoomX = Math.floor(Math.random()* arrRooms.length);
+			var randRoomY = Math.floor(Math.random()* arrRooms.length);
+			AddRoomDict( randRoomX,randRoomY);
+
 
 			//get id and cordinates
 			
 			iCount ++;
+			Generate(iCount)
 		}
-
-		for (var row = 0; row <= (arrRooms.length); i++) {
-			
-		}
-
 
 	}
-	console.log(arrRoomDict);
+
+	Generate(iCount);
+	//apply dictionary to main array
+	for (var i = 0; i <= arrRoomDict.length - 1; i++) {
+			arrRooms[arrRoomDict[i].x][arrRoomDict[i].y].roomType = 1;
+	}
+
+
+	//checkSpace(mapCenter,mapCenter);
+	//clears room discitonry, might have to disabled depending on how player movent is written
+	arrRoomDict = [];
+	//draw the map
 	fncDrawMap(GRID_SIZE, GRID_SIZE);
 
 }
-
-//bubble sort for testing
-function bubbleSort(arr){
-   var len = arr.length;
-   for (var i = len-1; i>=0; i--){
-     for(var j = 1; j<=i; j++){
-       if(arr[j-1]>arr[j]){
-           var temp = arr[j-1];
-           arr[j-1] = arr[j];
-           arr[j] = temp;
-        }
-     }
-   }
-   return arr;
-}
-
-/*
-function pow(x, n) {
-  if (n == 1) {
-    return x;
-  } else {
-    return x * pow(x, n - 1);
-  }
-}
-
-alert( pow(2, 3) ); // 8
-*/
-
-
-
-
-function sortArray(){
-//44 is the center
-var rooms = roomTypes;
-	arrRooms.sort(function(a,b){return a.id - b.id});
-	fncDrawMap();
-
-}
-
-
 
 //only change the display, need it to hold the data in an arry so the map doesnt change 
 //https://stackoverflow.com/questions/12583400/javascript-scope-of-nested-for-loop-index
