@@ -167,7 +167,9 @@ function basicMap(){
 		//Rx Ry is the current room
 		//var t,b,l,r,tl,tr,bl,br = 0;
 		//for (var Ri = 0;Ri <= 8 ;Ri++){
-
+			for (var i = 0; i <= arrRoomDict.length - 1; i++) {
+				arrRooms[arrRoomDict[i].x][arrRoomDict[i].y].roomType = 1;
+			}
 			//direct attachment
 			//top 
 			if (arrRooms[(Rx - 1)][Ry].roomType == 1){
@@ -248,26 +250,50 @@ function basicMap(){
 
 			
 			//random rooms
-			var randRoomX = Math.floor(Math.random()* arrRooms.length);
-			var randRoomY = Math.floor(Math.random()* arrRooms.length);
+			function RollRooms(){
 
-			if (randRoomX == 0){randRoomX++}
-			if (randRoomX == 8){randRoomX--}
 
-			if (randRoomY == 0){randRoomY++}
-			if (randRoomY == 8){randRoomY--}
+				var randRoomX = Math.floor(Math.random()* arrRooms.length);
+				var randRoomY = Math.floor(Math.random()* arrRooms.length);
 
+				if (randRoomX == 0){randRoomX++}
+				if (randRoomX == 8){randRoomX--}
+
+				if (randRoomY == 0){randRoomY++}
+				if (randRoomY == 8){randRoomY--}
+			
+				for (var i = 0; i <= arrRoomDict.length - 1; i++) {
+					if (arrRoomDict[i].x == randRoomX && arrRoomDict[i].y == randRoomY){
+						randRoomX = Math.floor(Math.random()* arrRooms.length);
+						randRoomY = Math.floor(Math.random()* arrRooms.length);
+
+						if (randRoomX == 0){randRoomX++}
+						if (randRoomX == 8){randRoomX--}
+						if (randRoomY == 0){randRoomY++}
+						if (randRoomY == 8){randRoomY--}
+					}else{
+						var randRooms = [randRoomX,randRoomY];
+						
+					}
+					return randRooms;
+				}
+			}
+
+			var Rroom = RollRooms();
+			
 			//console.log(randRoomX + ", " + randRoomY)
 
-			var checkResult = checkSpace(randRoomX, randRoomY);
+			var checkResult = checkSpace(Rroom[0], Rroom[1]);
+
+			console.log(Rroom[0], Rroom[1]);
 			console.log(checkResult);
 			
 			
 
 
 
-			AddRoomDict( randRoomX,randRoomY);
-
+			AddRoomDict(Rroom[0], Rroom[1]);
+			$("#" +Rroom[0] + Rroom[1] + ".grid-item").text(iCount);
 			//room approch
 
 			//var randRoom = Math.floor(Math.random()* arrRoomDict.length);
