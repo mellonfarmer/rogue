@@ -14,6 +14,7 @@ const DEFAULT_ROOMS = 10;
 
 
 var roomTypes = fncLoadRooms();
+const pos = fncRoomPositions();
 
 //Funcitons
 function fncFindCenter(){
@@ -78,6 +79,25 @@ function fncLoadRooms(){
 	CreateObjectItem(3,"tresure","rgb(200,200,0)"); //yellow
 	CreateObjectItem(4,"exit","rgb(200,0,0)"); //red 
 	return rooms;
+}
+
+function fncRoomPositions(){
+	var positions = [];
+	function CreateObjectPosition(name, xy, pm)
+	{
+		let position = new Object();
+		position.name = name; 
+		position.xy = xy; //x or y axsis
+		position.pm = pm; //plus minus
+		positions.push(position);
+	}
+
+	CreateObjectPosition("top","x","-");
+	CreateObjectPosition("up","x","+");
+	CreateObjectPosition("left","y","-");
+	CreateObjectPosition("right","y","+");
+
+	return positions;
 }
 
 
@@ -159,6 +179,7 @@ function basicMap(){
 		room.id = arrRoomDict.length;
 		room.x = x;
 		room.y = y;
+		room.occupied = "yes"
 		arrRoomDict.push(room);
 		//return room;
 	}
@@ -167,58 +188,7 @@ function basicMap(){
 		//Rx Ry is the current room
 		//var t,b,l,r,tl,tr,bl,br = 0;
 		//for (var Ri = 0;Ri <= 8 ;Ri++){
-			for (var i = 0; i <= arrRoomDict.length - 1; i++) {
-				arrRooms[arrRoomDict[i].x][arrRoomDict[i].y].roomType = 1;
-			}
-			//direct attachment
-			//top 
-			if (arrRooms[(Rx - 1)][Ry].roomType == 1){
-				//t = 1;
-				console.log("Top");
-				return 1;
-
-			}
-			//botom
-			if (arrRooms[(Rx + 1)][Ry].roomType == 1){
-				//b = 1;
-				console.log("Bottom");
-				return 2;
-			}
-			//left
-			if (arrRooms[(Rx)][Ry - 1].roomType == 1){
-				console.log("Left");
-				return 3;
-
-			}
-			//right
-			if (arrRooms[(Rx )][Ry + 1].roomType == 1){
-				console.log("Right");
-				return 4;
-
-			}
 			
-			//diagonals
-			//top left
-			if (arrRooms[(Rx - 1)][Ry - 1].roomType !== 0){
-				console.log("Top left");
-				return 5;
-			}
-			//top Right
-			if (arrRooms[(Rx - 1)][Ry + 1].roomType !== 0){	
-				console.log("Top Right");
-				return 6;
-			}
-			//bottom left
-			if (arrRooms[(Rx - 1)][Ry + 1].roomType !== 0){
-				console.log("Bottom left");
-				return 7;
-			}
-			//bottom right
-			if (arrRooms[(Rx + 1)][Ry + 1].roomType !== 0){
-				console.log("Bottom Right");
-				return 8;
-			}
-			return 0;
 		//}
 				/*
 		Checking grid:
@@ -237,7 +207,7 @@ function basicMap(){
 	var iCount = 0;
 
 	AddRoomDict( mapCenter,mapCenter);
-
+			
 
 	//recursive funciton to generate rooms
 	//run until count is equal to the default plus level
@@ -245,55 +215,8 @@ function basicMap(){
 		if (iCount == ((DEFAULT_ROOMS + currentLevel) -1 )){
 			return;
 		}else{
-			//pick a room on map via random number of exsisting rooms in arrRoomDict
-			//cahnge this to random seed 
+		
 
-			
-			//random rooms
-			function RollRooms(){
-
-
-				var randRoomX = Math.floor(Math.random()* arrRooms.length);
-				var randRoomY = Math.floor(Math.random()* arrRooms.length);
-
-				if (randRoomX == 0){randRoomX++}
-				if (randRoomX == 8){randRoomX--}
-
-				if (randRoomY == 0){randRoomY++}
-				if (randRoomY == 8){randRoomY--}
-			
-				for (var i = 0; i <= arrRoomDict.length - 1; i++) {
-					if (arrRoomDict[i].x == randRoomX && arrRoomDict[i].y == randRoomY){
-						randRoomX = Math.floor(Math.random()* arrRooms.length);
-						randRoomY = Math.floor(Math.random()* arrRooms.length);
-
-						if (randRoomX == 0){randRoomX++}
-						if (randRoomX == 8){randRoomX--}
-						if (randRoomY == 0){randRoomY++}
-						if (randRoomY == 8){randRoomY--}
-					}else{
-						var randRooms = [randRoomX,randRoomY];
-						
-					}
-					return randRooms;
-				}
-			}
-
-			var Rroom = RollRooms();
-			
-			//console.log(randRoomX + ", " + randRoomY)
-
-			var checkResult = checkSpace(Rroom[0], Rroom[1]);
-
-			console.log(Rroom[0], Rroom[1]);
-			console.log(checkResult);
-			
-			
-
-
-
-			AddRoomDict(Rroom[0], Rroom[1]);
-			$("#" +Rroom[0] + Rroom[1] + ".grid-item").text(iCount);
 			//room approch
 
 			//var randRoom = Math.floor(Math.random()* arrRoomDict.length);
@@ -303,7 +226,54 @@ function basicMap(){
 
 			//get id and cordinates
 			//console.log(iCount);
-			
+
+
+			//pick random rooom from the dictonary
+			let randomRoomfromDict = Math.floor(Math.random()*arrRoomDict.length);
+			//pick an anjoining space
+			let chosenPos =  Math.floor(Math.random()* pos.length);
+//if x +1 != occupied yes then  
+			//arrRoomDict[randomRoomfromDict].[arrRoomDict[randomRoomfromDict][pos[chosenPos].xy] + 1].occupied != "yes"
+
+			// function isSpaceFree (){
+
+			// 	switch([pos[chosenPos].pm]){
+			// 		case "+":
+			// 			if((arrRoomDict[randomRoomfromDict][pos[chosenPos].xy] + 1).occupied != "yes")
+			// 			{
+			// 				return 
+			// 			}
+			// 		break;
+
+			// 		case "-":
+
+			// 		break;
+
+
+
+			// 	}
+
+			// }
+
+			if(arrRoomDict[randomRoomfromDict][pos[chosenPos].xy] ){
+
+				
+			}
+			//if (arrRoomDict[randomRoomfromDict].[chosenPos.xy] )
+
+
+			// chech if a room already exsits in chosen spot
+
+			//if no add a room
+
+			//if yes pick another ajoining room
+
+			//if all spaces are invalid choose a new room in the dictonary
+
+			//after this is working checkfor 2x2 rooms and prevent placement
+
+
+
 			iCount ++;
 			Generate(iCount);
 		}
