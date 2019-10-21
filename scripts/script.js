@@ -93,7 +93,7 @@ function fncRoomPositions(){
 	}
 
 	CreateObjectPosition("top","x","-");
-	CreateObjectPosition("up","x","+");
+	CreateObjectPosition("bottom","x","+");
 	CreateObjectPosition("left","y","-");
 	CreateObjectPosition("right","y","+");
 
@@ -231,8 +231,12 @@ function basicMap(){
 			//pick random rooom from the dictonary
 			let randomRoomfromDict = Math.floor(Math.random()*arrRoomDict.length);
 			//pick an anjoining space
-			let chosenPos =  Math.floor(Math.random()* pos.length);
-//if x +1 != occupied yes then  
+			let chosenPos =  pos["Top"] //Math.floor(Math.random()* pos.length);
+
+
+
+
+			//if x +1 != occupied yes then  
 			//arrRoomDict[randomRoomfromDict].[arrRoomDict[randomRoomfromDict][pos[chosenPos].xy] + 1].occupied != "yes"
 
 			// function isSpaceFree (){
@@ -255,10 +259,10 @@ function basicMap(){
 
 			// }
 
-			if(arrRoomDict[randomRoomfromDict][pos[chosenPos].xy] ){
+			//if(arrRoomDict[randomRoomfromDict][pos[chosenPos].xy] ){
 
 				
-			}
+			//}
 			//if (arrRoomDict[randomRoomfromDict].[chosenPos.xy] )
 
 
